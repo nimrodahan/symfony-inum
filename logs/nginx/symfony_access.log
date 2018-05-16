@@ -1,0 +1,4 @@
+172.21.0.1 - - [15/May/2018:14:46:02 +0000] "GET / HTTP/1.1" 404 12310 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.170 Safari/537.36"
+172.21.0.1 - - [15/May/2018:14:46:04 +0000] "GET /_wdt/c72962 HTTP/1.1" 200 3456 "http://localhost/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.170 Safari/537.36"
+172.21.0.1 - - [15/May/2018:14:46:07 +0000] "GET /admin HTTP/1.1" 404 40769 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.170 Safari/537.36"
+172.21.0.1 - - [15/May/2018:14:46:08 +0000] "GET /_wdt/631dea HTTP/1.1" 200 4182 "http://localhost/admin" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.170 Safari/537.36"
