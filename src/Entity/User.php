@@ -16,31 +16,42 @@ class User {
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @JMS\SerializedName("user")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @JMS\Groups({"request", "response"})
+     * @SWG\Property(example="example@host.com")
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @JMS\Groups({"request", "response"})
+     * @SWG\Property(example="p@$$w0rd")
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @JMS\Groups({"request", "response"})
+     * @SWG\Property(example="Lionel")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @JMS\Groups({"request", "response"})
+     * @SWG\Property(example="Messi")
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     * @JMS\Groups({"request", "response"})
+     * @SWG\Property(example="0")
      */
     private $isAdmin;
 

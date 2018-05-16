@@ -1,6 +1,11 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-user:
+api:
   type: rest
-  resource: App\Controller\UserController
+  resource: App\Controller\ApiController
+
+app.swagger_ui:
+  path: /
+  methods: GET
+  defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
