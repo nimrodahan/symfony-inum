@@ -16,6 +16,7 @@ class User {
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @JMS\Groups({"request", "response"})
      * @JMS\SerializedName("user")
      */
     private $id;

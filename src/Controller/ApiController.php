@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\Mapping\Entity;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,11 +31,6 @@ class ApiController extends FOSRestController implements ClassResourceInterface 
     private $formFactory;
 
     /**
-     * @var OrderRepository
-     */
-    private $repository;
-
-    /**
      * OrderController constructor.
      * @param FormFactoryInterface $formFactory
      */
@@ -43,9 +39,9 @@ class ApiController extends FOSRestController implements ClassResourceInterface 
     }
 
     /**
-     * Add user
+     * Create user
      *
-     * @Rest\Post("/addUser")
+     * @Rest\Post("/createUser")
      * @Rest\View(serializerGroups={"response"}, statusCode="201")
      *
      * @SWG\Response(
@@ -71,13 +67,13 @@ class ApiController extends FOSRestController implements ClassResourceInterface 
      * @throws FormValidationException
      */
     public function createUserAction(Request $request) {
-        $repository = $this->getRepository();
+        $repository = $this->getRepository(User::class);
         $form = $this->formFactory->create(UserType::class);
         $form->handleRequest($request);
 
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            throw new FormValidationException($form, 'Invalid order', 1000, []);
+            throw new FormValidationException($form, 'Invalid user', 1000, []);
         }
 
         $user = $form->getData();
@@ -91,12 +87,12 @@ class ApiController extends FOSRestController implements ClassResourceInterface 
     /**
      * Remove user
      *
-     * @Rest\Post("/addUser")
+     * @Rest\Post("/removeUser")
      * @Rest\View(serializerGroups={"response"}, statusCode="201")
      *
      * @SWG\Response(
      *     response=201,
-     *     description="Returns whether the user was removed or not",
+     *     description="Returns whether the user was removed successfully",
      *     @SWG\Schema(
      *         ref=@Nelmio\Model(type=User::class, groups={"response"})
      *     )
@@ -117,34 +113,143 @@ class ApiController extends FOSRestController implements ClassResourceInterface 
      * @throws FormValidationException
      */
     public function removeUserAction(Request $request) {
-        $form = $this->formFactory->create(UserType::class);
-        $form->handleRequest($request);
-
-
-        if (!$form->isSubmitted() || !$form->isValid()) {
-            throw new FormValidationException($form, 'Invalid order', 1000, []);
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $this->getRepository(User::class);
+        $id = $request->query->get('id');
+        $user = $repository->find($id);
+        if($user){
+            $entityManager->remove($user);
+            $entityManager->flush();
         }
-
-        $order = $form->getData();
-        $this->repository->createOrder($order);
-
-        $view = $this->view($order);
+        $view = $this->view($user);
 
         return $view;
     }
 
+    /**
+     * Create group
+     *
+     * @Rest\Post("/createGroup")
+     * @Rest\View(serializerGroups={"response"}, statusCode="201")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Returns whether the user was removed successfully",
+     *     @SWG\Schema(
+     *         ref=@Nelmio\Model(type=Group::class, groups={"response"})
+     *     )
+     * )
+     * @SWG\Parameter(
+     *     name="user_delete",
+     *     in="body",
+     *     description="Process payment for given order",
+     *     @SWG\Schema(
+     *         ref=@Nelmio\Model(type=Group::class, groups={"request"})
+     *     )
+     * )
+     *
+     * @param Request $request
+     * @return \FOS\RestBundle\View\View|\Symfony\Component\Form\FormInterface
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws FormValidationException
+     */
     public function createGroupAction() {
 
     }
 
+    /**
+     * Remove group
+     *
+     * @Rest\Post("/removeGroup")
+     * @Rest\View(serializerGroups={"response"}, statusCode="201")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Returns whether the group was removed successfully",
+     *     @SWG\Schema(
+     *         ref=@Nelmio\Model(type=Group::class, groups={"response"})
+     *     )
+     * )
+     * @SWG\Parameter(
+     *     name="user_delete",
+     *     in="body",
+     *     description="Process payment for given order",
+     *     @SWG\Schema(
+     *         ref=@Nelmio\Model(type=Group::class, groups={"request"})
+     *     )
+     * )
+     *
+     * @param Request $request
+     * @return \FOS\RestBundle\View\View|\Symfony\Component\Form\FormInterface
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws FormValidationException
+     */
     public function removeGroupAction() {
 
     }
 
+    /**
+     * Remove user
+     *
+     * @Rest\Post("/addGroupUser")
+     * @Rest\View(serializerGroups={"response"}, statusCode="201")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Returns whether the user was add to group successfully",
+     *     @SWG\Schema(
+     *         ref=@Nelmio\Model(type=User::class, groups={"response"})
+     *     )
+     * )
+     * @SWG\Parameter(
+     *     name="user_delete",
+     *     in="body",
+     *     description="Process payment for given order",
+     *     @SWG\Schema(
+     *         ref=@Nelmio\Model(type=Order::class, groups={"request"})
+     *     )
+     * )
+     *
+     * @param Request $request
+     * @return \FOS\RestBundle\View\View|\Symfony\Component\Form\FormInterface
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws FormValidationException
+     */
     public function addGroupUserAction() {
 
     }
 
+    /**
+     * Remove user
+     *
+     * @Rest\Post("/removeGroupUser")
+     * @Rest\View(serializerGroups={"response"}, statusCode="201")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Returns whether the user was removed from the group successfully",
+     *     @SWG\Schema(
+     *         ref=@Nelmio\Model(type=User::class, groups={"response"})
+     *     )
+     * )
+     * @SWG\Parameter(
+     *     name="user_delete",
+     *     in="body",
+     *     description="Process payment for given order",
+     *     @SWG\Schema(
+     *         ref=@Nelmio\Model(type=Order::class, groups={"request"})
+     *     )
+     * )
+     *
+     * @param Request $request
+     * @return \FOS\RestBundle\View\View|\Symfony\Component\Form\FormInterface
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws FormValidationException
+     */
     public function removeGroupUserAction() {
 
     }
@@ -152,7 +257,7 @@ class ApiController extends FOSRestController implements ClassResourceInterface 
     /**
      * @return UserRepository
      */
-    private function getRepository() {
-        return $this->getDoctrine()->getRepository(User::class);
+    private function getRepository($entityClass) {
+        return $this->getDoctrine()->getRepository($entityClass);
     }
 }
